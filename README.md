@@ -28,6 +28,16 @@
 
 用 **上传录音的那个账号** 取登录态。会议接口按 `scope=mine` 过滤。
 
+## 命名规则
+
+知识库没有改名接口（文档名 = 上传文件名），所以上传前必须命名：
+
+```
+MTG-2026-10-14 职称评审材料填报培训 · 手机录音 10-14 10-47.md
+```
+
+主题是读转写提炼出来的（8–20 字，说清跟谁谈什么），不是设备名。修改记录见 `CHANGELOG.md`。
+
 ## 产物
 
 ```
@@ -46,7 +56,7 @@ agent-template.md     智能体模板（运行时 zip 内）
 VERSION               版本号
 skills/
   install-meeting-recording-agent/SKILL.md   入口安装技能（薄）
-runtime-v1.0.0.zip    Release 资产：真正的技能与脚本
+runtime-v1.0.1.zip    Release 资产：真正的技能与脚本
 ```
 
 ## 依赖
