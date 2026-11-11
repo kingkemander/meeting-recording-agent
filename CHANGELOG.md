@@ -1,5 +1,12 @@
 # 变更记录
 
+## v1.0.2
+
+- 录音与纪要同名配对上传（`.wav` + `.md`），音频先传；`kb-upload/` 用硬链接不占双份空间
+- `upload_kb.py` 默认带音频，新增 `--no-audio`；补充大文件 `processing` 不重复上传的说明
+- `export_meetings.py` 在 `kb-upload/` 生成同主名音频
+- 修正默认策略：此前默认只传 Markdown，现改为「原始录音 + 纪要」一起入库
+
 ## v1.0.1
 
 - 新增 `set_topic.py`：上传前按「内容主题 · 源文件名」命名
