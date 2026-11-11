@@ -70,7 +70,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--kb", default=None)
     ap.add_argument("--domain", default=os.environ.get("SPACEKB_DOMAIN", ""))
-    ap.add_argument("--glob", default="kb-upload/*.md")
+    ap.add_argument("--glob", default="kb-upload/*")
+    ap.add_argument("--no-audio", action="store_true", help="只传 Markdown，不传录音")
     ap.add_argument("--file", default=None)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--list-kb", action="store_true")
@@ -103,7 +104,15 @@ def main():
     if not args.domain:
         raise SystemExit("必须指定目标权限域：--domain <名称>（用 --list-kb 查看可选域）")
 
-    files = [args.file] if args.file else sorted(glob.glob(args.glob))
+    AUDIO_EXT = {".wav", ".mp3", ".m4a", ".aac", ".ogg", ".opus", ".flac"}
+    if args.file:
+        files = [args.file]
+    else:
+        files = [f for f in sorted(glob.glob(args.glob)) if os.path.isfile(f)]
+        if args.no_audio:
+            files = [f for f in files if os.path.splitext(f)[1].lower() not in AUDIO_EXT]
+        # 音频排前面：先入库原始录音，再入库纪要文本
+        files.sort(key=lambda f: (0 if os.path.splitext(f)[1].lower() in AUDIO_EXT else 1, f))
     if not files:
         raise SystemExit(f"没有匹配到文件：{args.glob}")
 
