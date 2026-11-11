@@ -197,11 +197,34 @@ def export_one(meeting, detail, out_root, kb_root, force=False, audio=True):
     with open(kb_path, "w", encoding="utf-8") as f:
         f.write(notes)
 
+    # 音频同主名放一份到 kb-upload（硬链接，不复制；失败了再复制）
+    kb_audio = None
+    if audio:
+        ext = m.get("audio_format") or "wav"
+        src_audio = os.path.join(out, f"recording.{ext}")
+        if os.path.exists(src_audio):
+            kb_audio = os.path.splitext(kb_path)[0] + f".{ext}"
+            if os.path.exists(kb_audio):
+                try:
+                    os.remove(kb_audio)
+                except OSError:
+                    pass
+            try:
+                os.link(src_audio, kb_audio)
+            except OSError:
+                try:
+                    import shutil as _sh
+                    _sh.copy2(src_audio, kb_audio)
+                except Exception as e:
+                    kb_audio = None
+                    log(f"  [警告] 音频未放入 kb-upload：{e}")
+
     log(f"[完成] {folder}  转写 {len(body)} 字  音频 {audio_ok}  知识库名 {kb_name}")
     return {
         "folder": folder,
         "kb_file": os.path.relpath(kb_path, os.path.dirname(out_root) or "."),
         "kb_name": kb_name,
+        "kb_audio": os.path.basename(kb_audio) if kb_audio else None,
         "transcript_chars": len(body),
         "has_summary": bool(ai_txt),
         "empty_transcript": empty_tr,
