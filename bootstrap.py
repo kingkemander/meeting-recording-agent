@@ -20,9 +20,9 @@ import zipfile
 
 # ============ 需要修改 ============
 REPO = "kingkemander/meeting-recording-agent"
-VERSION = "v1.0.1"
-ASSET = "runtime-v1.0.1.zip"
-SHA256 = "14a84481aa5f8bf0e68d7e3057648653c065029d520c17f57846690e3928f5f1"
+VERSION = "v1.0.2"
+ASSET = "runtime-v1.0.2.zip"
+SHA256 = "15a41e07d93f8cb47f9bcd47e4c75562aebe732bdaf0accd063fac815f23c3db"
 PLUGIN_ID = "meeting-recording-agent"
 AGENT_NAME = "会议纪要导出"
 # ==================================
