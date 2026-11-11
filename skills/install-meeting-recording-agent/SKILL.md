@@ -17,7 +17,7 @@ description: "安装、更新、初始化「会议纪要导出」智能体。当
 **第一步：下载引导器并校验**
 
 ```bash
-python3 -c "import hashlib,pathlib,urllib.request;u='https://github.com/kingkemander/meeting-recording-agent/releases/download/v1.0.0/bootstrap.py';p=pathlib.Path('<工作区>')/'.spaceagents/plugins/meeting-recording-agent/bootstrap.py';p.parent.mkdir(parents=True,exist_ok=True);d=urllib.request.urlopen(u,timeout=60).read();h=hashlib.sha256(d).hexdigest();assert h=='c81013df2a93fc5fc9c5dea187a741dcd1b3fa130a5b54a0f9d89299bd4df487',f'校验失败: {h}';p.write_bytes(d);print(p)"
+python3 -c "import hashlib,pathlib,urllib.request;u='https://github.com/kingkemander/meeting-recording-agent/releases/download/v1.0.1/bootstrap.py';p=pathlib.Path('<工作区>')/'.spaceagents/plugins/meeting-recording-agent/bootstrap.py';p.parent.mkdir(parents=True,exist_ok=True);d=urllib.request.urlopen(u,timeout=60).read();h=hashlib.sha256(d).hexdigest();assert h=='29287bb3600717312c0b5fdff4019a737b3fb778cf9ec513348373d7918c4bd7',f'校验失败: {h}';p.write_bytes(d);print(p)"
 ```
 
 **第二步：运行**
@@ -35,6 +35,15 @@ python3 "<工作区>/.spaceagents/plugins/meeting-recording-agent/bootstrap.py" 
 
 > 装好了。**新建一个会话**，在智能体下拉里选「会议纪要导出」，
 > 然后说「导出我最近一次会议」就能用。
+
+装完它会走固定六步：体检登录态 → 导出 → **读内容命名** → 上传知识库（指定权限域、自动查重）→ 抽查分块 → 汇报。
+
+## v1.0.1 更新内容
+
+- 新增 `set_topic.py`：上传前按「内容主题 · 源文件名」命名（知识库没有改名接口，名字上传即定型）
+- 新增 `upload_kb.py`：按文件名查重 + 必须指定权限域 + 幂等上传
+- `export_meetings.py` 增强：`--force` 不重复下载音频、待办去掉原始 JSON
+- 主流程固化为六步，新增「8. 全流程固化」与定时任务提示词
 
 ## 日常使用
 
